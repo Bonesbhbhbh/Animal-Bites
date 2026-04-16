@@ -11,3 +11,8 @@
     (is (= 9004 (count animal-data))) ; data should have [#] rows
     (type (first (first animal-data))) ; first entry should be a string
     ))
+
+(deftest get-most-common-test 
+  (testing "Testing most common"
+    (is (= ["dog" 3] (get-most-common ["dog" "cat" "cat" "dog" "dog" "bat"])))
+  ))
