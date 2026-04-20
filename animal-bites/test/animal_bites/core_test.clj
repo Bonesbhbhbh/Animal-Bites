@@ -15,4 +15,8 @@
 (deftest get-most-common-test 
   (testing "Testing most common"
     (is (= ["dog" 3] (get-most-common ["dog" "cat" "cat" "dog" "dog" "bat"])))
+    (is (= ["dog" 1] (get-most-common ["dog"])))
+    (is (= nil (get-most-common [])))
+    ;; (is (= ["dog" 2 , "cat" 2] (get-most-common ["dog" "dog" "cat" "cat" "bat"])))  ; what do we do if there are multiple most common? 
+    ; is first most of the list ok? we should probably list all strings of same frequency, right?
   ))
