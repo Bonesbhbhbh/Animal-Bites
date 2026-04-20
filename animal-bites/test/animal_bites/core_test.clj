@@ -14,19 +14,21 @@
 
 (deftest column-test
   (testing "Testing the column function"
+    ;; testing on "normal" data
     (let [data1 [
       ["col1" "col2" "col3"]
       ["1,1" "1,2" "1,3"]
       ["2,1" "2,2" "2,3"]]]
       (is (= ["col1" "1,1" "2,1"] (column data1 "col1")))
-      (is (= nil (column data1 "not a header")))
+      (is (= nil (column data1 "not a header"))) ; test for invalid header
     )
-    
+    ;; testing on invalid inputs
+    (is (= nil (column [] "col1"))) ; test for invalid data (still a vector)
     (is (= nil (column [[][][]] "col1")))
     (is (= nil (column [[1 2][][]] "col1")))
     (is (= [1] (column [[1 2]] 1)))
     (is (= [1 nil nil] (column [[1 2][nil nil][nil nil]] 1)))
-    
+    ;; Testing on data with nil value
     (let [data2 [
       ["normal" "sparse" "col3"]
       ["n1" 1 "1,3"]

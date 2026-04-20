@@ -11,12 +11,13 @@
       (reduce conj [] data))))
 
 (defn column
-  "Takes a csv formatted as a list of nested vectors and one string associated with a column header (value in first vector).
-  Returns all information in that column."
+  "Takes one column header as a string, and one CSV formatted as nested vectors.
+  Returns all information in that column.
+  The first row in the CSV should be the headers of the data. 
+  Missing values are not accepted." ; missing values should be set to "" or nil.
   [data header] ; we may be able to use destructuring here to split off the first row of data
-    ;; should really check that the data is not empty and that the header is valid
     ;; this function is written in a way where you could technically have two columns with same header, hence the `(first )`...
     (first (for [i (range (count (first data))) ; for i in the number of headings:
       :when (= header (nth (first data) i))] ; when the heading matches the heading passed to func
-      (map #(nth % i) data)))) ; take nth item from data
+      (map #(nth % i) data)))) ; take nth item from each row of the data
       
