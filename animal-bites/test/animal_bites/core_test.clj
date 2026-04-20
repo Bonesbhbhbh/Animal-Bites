@@ -14,12 +14,13 @@
 
 (deftest column-test
   (testing "Testing the column function"
-    ;; testing on "normal" data
+    ;; testing on "normal" data, with one duplicate column
     (let [data1 [
-      ["col1" "col2" "col3"]
+      ["col1" "col2" "col2"]
       ["1,1" "1,2" "1,3"]
       ["2,1" "2,2" "2,3"]]]
       (is (= ["col1" "1,1" "2,1"] (column data1 "col1")))
+      (is (= ["col2" "1,2" "2,2"] (column data1 "col2")))
       (is (= nil (column data1 "not a header"))) ; test for invalid header
     )
     ;; testing on invalid inputs
