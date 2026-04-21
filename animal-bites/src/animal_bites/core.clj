@@ -17,10 +17,8 @@
   ;; (first (sort-by val > (frequencies v)))  ; original function
   
   (if (empty? v) nil ; if vector is empty, will not calculate max (max doesn't like empty vectors)
-    (def calcMax (apply max (keys (group-by #(val %) (frequencies v))))))  ; calcMax is the maximum number of occurrences of a string
-  (reduce into [] ((group-by #(val %) (frequencies v)) calcMax)))  ;checks the collection for strings with the max number of occurrences
+    (reduce into [] ((group-by #(val %) (frequencies v)) (apply max (keys (group-by #(val %) (frequencies v))))))))  ;checks the collection for strings with the max number of occurrences
   ; places all strings with the same number of occurrences into a single vector
-  ; this currently messes with returning nil for empty vectors...
 
 (println 
   (second animal-data)
