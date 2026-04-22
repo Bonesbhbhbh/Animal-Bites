@@ -84,4 +84,35 @@ Group-by takes a function and a collection and returns a map relating the result
     ;; returns: {}
 ```
 
-### 1 Excercise (plus 2 tests and a solution)
+### 1 Exercise (plus 2 tests and a solution)
+
+Given a map, use `group-by` to group the key value pairs by their values and return a map of the groups in ascending order.
+
+Test cases:
+
+```{Clojure}
+(def map1 {"oranges" 27, "lemons" 11, "apples" 42, "peaches" 11})
+(def map2 {"parrots" 14, "turtles" 14, "dogs" 14, "hamsters" 84})
+
+    (defn fn
+        ""
+        [m]
+        ;; write function here
+    )
+
+    (is (= {11 [["lemons" 11] ["peaches" 11]], 27 [["oranges" 27]], 42 [["apples" 42]]} (fn map1)))
+    (is (= {14 [["parrots" 14] ["turtles" 14] ["dogs" 14]], 84 [["hamsters" 84]]} (fn map2)))
+
+```
+
+solution:
+
+```{Clojure}
+
+(defn answer
+    ""
+    [m]
+    (into {} (sort (group-by #(val %) m)))
+)
+
+```
