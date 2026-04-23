@@ -11,7 +11,7 @@
       (reduce conj [] data))))
 
 (defn get-most-common
-  "Takes a vector of information and returns the most commonly found value. (if none is found...)"
+  "Takes a vector of information and returns the most commonly found value. If more than one value appears most often, values will be returned in a vector. If the vector is empty, the function will return nil"
   [v]
   ; sort by values, then grab first item
   ;; (first (sort-by val > (frequencies v)))  ; original function
