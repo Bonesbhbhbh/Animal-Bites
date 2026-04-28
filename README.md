@@ -9,9 +9,9 @@ A supplementary library `` explores some of the function used in exploring the A
 This project aims to answer the following questions:
 
 * Least common animal to be bitten by?
-* What was the most common animal to result in a positive rabies result? What animal bite is most likely to result in rabies on average?
-* Type of animal most likely to be caught?
+* What animal bite is most likely to result in rabies on average?
+* Type of animal most likely to be caught after a bite?
 * What day of the week or year has the most bites on average? What time of day has the most bites?
-* Nearest bite in time to you?
-* What is the average time between bite and head sent
-* What places were people bitten, besides head and body?
+* Most recent animal bite?
+* What is the average time between time of bite and time head was sent?
+* What places were people bitten besides head and body?
