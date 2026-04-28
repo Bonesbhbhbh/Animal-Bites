@@ -8,16 +8,22 @@
 (def animal-data 
   (with-open [reader (io/reader "Health_AnimalBites.csv")] ; this requires the data file to be stored at the project-level
     (let [data (csv/read-csv reader)]
-      (reduce conj [] data))))
+          (reduce conj [] data))))
 
 (defn get-most-common
-  "Takes a vector of information and returns the most commonly found value. If more than one value appears most often, values will be returned in a vector. If the vector is empty, the function will return nil"
+  "Takes a vector of information and returns the most commonly found value.
+  If more than one value appears most often, values will be returned in a vector.
+  If the vector is empty, the function will return nil"
   [v]
-  ; sort by values, then grab first item
-  ;; (first (sort-by val > (frequencies v)))  ; original function
-  
-  (if (empty? v) nil ; if vector is empty, will not calculate max (max doesn't like empty vectors)
-    (reduce into [] ((group-by #(val %) (frequencies v)) (apply max (keys (group-by #(val %) (frequencies v))))))))  ;checks the collection for strings with the max number of occurrences
+  (if (empty? v) 
+    nil ; if vector is empty, will not calculate max (max doesn't like empty vectors)
+    (reduce 
+      into 
+      []
+      ;; This next bit is a odd sequence of the most common word and the count of time it occurs.
+      ;; It is formatted this way to allow for cases where there are ties for most common item.
+      ((group-by #(val %) (frequencies v))
+        (apply max (keys (group-by #(val %) (frequencies v)))))))) ; checks the collection for strings with the max number of occurrences
   ; places all strings with the same number of occurrences into a single vector
 
 (println 
