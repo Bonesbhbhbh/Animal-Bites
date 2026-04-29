@@ -21,10 +21,18 @@
   ; sort by values, then grab first item
   ;; (first (sort-by val > (frequencies v)))  ; original function
   
-  (if (empty? v) nil ; if vector is empty, will not calculate max (max doesn't like empty vectors)
-    (reduce into [] 
-      ((group-by-frequencies v) (apply max (keys (group-by-frequencies v)))))))  ;checks the collection for strings with the max number of occurrences
-  ; places all strings with the same number of occurrences into a single vector
+  (if (empty? v) nil ; if vector is empty, will not calculate max frequency (max doesn't like empty vectors)
+    (reduce into [] ; places all strings with the same number of occurrences into a single vector
+            ((group-by-frequencies v) (apply max (keys (group-by-frequencies v)))))))  ; finds strings in collection with max number of frequencies
+
+(defn get-least-common
+  "Takes a vector of information and returns the least commonly found value. If more than one value appears least often, values will be returned in a vector. If the vector is empty, the function will return nil"
+  [v]
+
+  (if (empty? v) nil ; if vector is empty, will not calculate max frequency (max doesn't like empty vectors)
+    (reduce into [] ; places all strings with the same number of occurrences into a single vector
+      (group-by-frequencies v) (apply min (keys (group-by-frequencies v))))) ; finds strings in collection with min number of frequencies
+  )
 
 (println 
   (second animal-data)
