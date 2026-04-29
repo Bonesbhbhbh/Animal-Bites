@@ -31,8 +31,7 @@
 
   (if (empty? v) nil ; if vector is empty, will not calculate max frequency (max doesn't like empty vectors)
     (reduce into [] ; places all strings with the same number of occurrences into a single vector
-      (group-by-frequencies v) (apply min (keys (group-by-frequencies v))))) ; finds strings in collection with min number of frequencies
-  )
+            ((group-by-frequencies v) (apply min (keys (group-by-frequencies v))))))) ; finds strings in collection with min number of frequencies
 
 (println 
   (second animal-data)
