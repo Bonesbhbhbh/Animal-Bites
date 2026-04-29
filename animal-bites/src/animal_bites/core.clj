@@ -10,6 +10,11 @@
     (let [data (csv/read-csv reader)]
       (reduce conj [] data))))
 
+(defn group-by-frequencies
+  "Takes a vector and returns a map with the number of times that each element in the vector occurs (keys) and its corresponding elements (values)"
+  [v]
+  (group-by #(val %) (frequencies v)))
+
 (defn get-most-common
   "Takes a vector of information and returns the most commonly found value. If more than one value appears most often, values will be returned in a vector. If the vector is empty, the function will return nil"
   [v]
@@ -17,7 +22,8 @@
   ;; (first (sort-by val > (frequencies v)))  ; original function
   
   (if (empty? v) nil ; if vector is empty, will not calculate max (max doesn't like empty vectors)
-    (reduce into [] ((group-by #(val %) (frequencies v)) (apply max (keys (group-by #(val %) (frequencies v))))))))  ;checks the collection for strings with the max number of occurrences
+    (reduce into [] 
+      ((group-by-frequencies v) (apply max (keys (group-by-frequencies v)))))))  ;checks the collection for strings with the max number of occurrences
   ; places all strings with the same number of occurrences into a single vector
 
 (println 
