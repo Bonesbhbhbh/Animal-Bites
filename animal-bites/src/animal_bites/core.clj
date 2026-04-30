@@ -47,3 +47,28 @@
       :when (= header (nth (first data) i))] ; when the heading matches the heading passed to func
       (map #(nth % i) data)))) ; take nth item from each row of the data
       
+;; initial exploration
+(println 
+  "Columns in animal-data: "
+  (first animal-data)
+  "\nAn example of an entry"
+  (second animal-data)
+  "\nThe types of animals that bit in this dataset are:"
+  (distinct (rest (column animal-data "SpeciesIDDesc")))
+  "\nPlease note the odd space in the line above, thats from NA values, its actually an empty string.")
+
+;; Answering Questions
+(println 
+  "\nLeast common animal to be bitten by?"
+  ;; Harley is working on this code in another branch
+  "\nMost common animal to result in a positive rabies result?"
+  ;; get two columns, one with rabies results and one with animal types
+  "\n First let's check what positive results are marked as:"
+  (distinct (rest (column animal-data "ResultsIDDesc")))
+  "\n Actual q2-results: " ; (frequencies q2-results)
+  (def rabies-results (map #(if (= % "POSITIVE") % false) (rest (column animal-data "ResultsIDDesc"))))
+  (def species (rest (column animal-data "SpeciesIDDesc")))
+  (for [x (range (count rabies-results))]
+    (if (nth rabies-results x) (nth species x))) ; returns nil a whole bunch of times
+
+  "\nType of animal most likely to be caught after a bite?")
