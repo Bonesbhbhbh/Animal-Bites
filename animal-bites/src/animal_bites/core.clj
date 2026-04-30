@@ -61,15 +61,18 @@
   (distinct (rest (column animal-data "SpeciesIDDesc")))
   "\nPlease note the odd space in the line above, thats from NA values which are stored as an empty string.")
 
-  (def rabies-results (map #(if (= % "POSITIVE") % false) (rest (column animal-data "ResultsIDDesc"))))
-  (def species (rest (column animal-data "SpeciesIDDesc")))
+;; get two columns, one with rabies results and one with animal types
+(def rabies-results (map #(if (= % "POSITIVE") % false) (rest (column animal-data "ResultsIDDesc"))))
+(def species (rest (column animal-data "SpeciesIDDesc")))
+
 ;; Answering Questions
 (println 
   "\nLeast common animal to be bitten by?"
   ;; (take-nth 2 (get-least-common species))
   (get-least-common species) ; [SKUNK 1]
-  "\nMost common animal to result in a positive rabies result?"
-  ;; get two columns, one with rabies results and one with animal types
+  "\nWhat is the species distribution of bites that resulted in positive rabies test results.
+  What is the most common animal to result in a positive rabies result?" 
+  ;; please note that we are not looking for the animal most LIKELY to result in a positive result
   "\n First let's check what positive results are marked as.
   Our initial frequencies (without removing missing values) are: "
   (frequencies (rest (column animal-data "ResultsIDDesc")))
