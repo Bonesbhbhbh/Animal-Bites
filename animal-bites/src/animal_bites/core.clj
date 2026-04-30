@@ -10,15 +10,30 @@
     (let [data (csv/read-csv reader)]
       (reduce conj [] data))))
 
+(defn group-by-frequencies
+  "Takes a vector and returns a map with the number of times that each element in the vector occurs (keys) and its corresponding elements (values). If the vector is empty, the function will return an empty map"
+  [v]
+  (group-by #(val %) (frequencies v)))
+  ;; grouping the keys of mapped occurrences in v into a new map based on the different values of the first map
+
 (defn get-most-common
   "Takes a vector of information and returns the most commonly found value. If more than one value appears most often, values will be returned in a vector. If the vector is empty, the function will return nil"
   [v]
   ; sort by values, then grab first item
   ;; (first (sort-by val > (frequencies v)))  ; original function
-  
-  (if (empty? v) nil ; if vector is empty, will not calculate max (max doesn't like empty vectors)
-    (reduce into [] ((group-by #(val %) (frequencies v)) (apply max (keys (group-by #(val %) (frequencies v))))))))  ;checks the collection for strings with the max number of occurrences
-  ; places all strings with the same number of occurrences into a single vector
+  (if (empty? v) nil ; if vector is empty, will not calculate max frequency (max doesn't like empty vectors)
+    (reduce into [] ; places all strings with the same number of occurrences into a single vector
+            ((group-by-frequencies v) (apply max (keys (group-by-frequencies v)))))))  ; finds strings in collection with max number of frequencies
+
+(defn get-least-common
+  "Takes a vector of information and returns the least commonly found value. If more than one value appears least often, values will be returned in a vector. If the vector is empty, the function will return nil"
+  [v]
+  (if (empty? v) nil ; if vector is empty, will not calculate max frequency (max doesn't like empty vectors)
+    (reduce into [] ; places all strings with the same number of occurrences into a single vector
+            ((group-by-frequencies v) (apply min (keys (group-by-frequencies v))))))) ; finds strings in collection with min number of frequencies
+
+;; can use (take-nth 2 (get-most-common v)) to just get the elements without their number of occurrences
+;; ^^ helpful for answering questions
 
 (println 
   (second animal-data)
