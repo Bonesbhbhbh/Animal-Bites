@@ -4,7 +4,6 @@
             [clojure.data.csv :as csv]))
 ;; This code is written by Orville Anderson and Harley Hannahs.
 
-(println "In core.clj of animal_bites") ; quick check to see if running in correct file.
 (def animal-data 
   (with-open [reader (io/reader "Health_AnimalBites.csv")] ; this requires the data file to be stored at the project-level
     (let [data (csv/read-csv reader)]
@@ -53,13 +52,13 @@
 
 ;; initial exploration
 (println 
-  "Columns in animal-data: "
+  "\n Columns in animal-data: "
   (first animal-data)
-  "\nAn example of an entry"
+  "\n\n An example of an entry: "
   (second animal-data)
-  "\nThe types of animals that bit in this dataset are:"
+  "\n\n The types of animals that bit in this dataset are:"
   (distinct (rest (column animal-data "SpeciesIDDesc")))
-  "\nPlease note the odd space in the line above, thats from NA values which are stored as an empty string.")
+  "\n\t Please note the odd space in the line above, thats from NA values which are stored as an empty string.")
 
 ;; get two columns, one with rabies results and one with animal types
 ;; make new variable that contains only the species in cases that were positive for rabies
@@ -79,12 +78,12 @@
 
 ;; Answering Questions
 (println 
-  "\nLeast common animal to be bitten by?"
+  "\n Least common animal to be bitten by?"
   ;; (take-nth 2 (get-least-common species))
   (get-least-common species)) ; [SKUNK 1]
 
 (println 
-  "\nWhat is the species distribution of bites that resulted in positive rabies test results.
+  "\n What is the species distribution of bites that resulted in positive rabies test results.
   What is the most common animal to result in a positive rabies result?" 
   ;; please note that we are not looking for the animal most LIKELY to result in a positive result
   "\n First let's check what positive results are marked as.
@@ -93,24 +92,26 @@
   "\n After replacing all missing, unknown and negative values with false, our frequencies are: "
   (frequencies rabies-results)
   "\n Actual results: "
-  "\n Count: " (count pos-results-species) ; {UNKNOWN 603, RELEASED 912, KILLED 16, "" 7468, DIED 4}
-  "\n Frequencies: " (frequencies pos-results-species)
-  "\n most common animal to result in a positive rabies result? " (get-most-common pos-results-species))
+  "\n\t Count: " (count pos-results-species) ; {UNKNOWN 603, RELEASED 912, KILLED 16, "" 7468, DIED 4}
+  "\n\t Frequencies: " (frequencies pos-results-species)
+  "\n\t Most common animal to result in a positive rabies result? " (get-most-common pos-results-species))
 
-(println "\nType of animal most likely to be caught after a bite?"
-  "we need to decide if we want to use DispositionIDDesc as a metric of if an animal was caught or head_sent_date"
-  "\nDispositionIDDesc"
-  "\n\tFrequencies: " (frequencies disposition)
-  "\n\tDoing some quick math this would give us 932 animals who were caught (912+16+4)"
+(println 
+  "\n Type of animal most likely to be caught after a bite?
+  We need to decide if we want to use `DispositionIDDesc` as a metric of if an animal was caught or `head_sent_date`"
+  "\n DispositionIDDesc"
+  "\n\t Frequencies: " (frequencies disposition)
+  "\n\t Doing some quick math this would give us 932 animals who were caught (912+16+4)"
 
-  "\nhead_sent_date"
-  "\n\tCount of distinct entries: " (count (distinct head_sent_date))
-  "\n\tCount of entries (not empty strings)" (count (filter #(not= "" %) head_sent_date))
-  "\n\tUsing this metric, we would have 395 animals who were caught.
+  "\n head_sent_date"
+  "\n\t Count of distinct entries: " (count (distinct head_sent_date))
+  "\n\t Count of entries (not empty strings)" (count (filter #(not= "" %) head_sent_date))
+  "\n\t Using this metric, we would have 395 animals who were caught.
         Presumably every animal who had it's head sent in was dead, which does not line up with our findings above."
 
-  "\n\n I am choosing to answer this question using the DispositionIDDesc variable. This is pretty easily modified to use a different condition."
-  "\nCount of captured species: " (count captured-species)
-  "\nDistinct captured species: " (distinct captured-species)
-  "\nFrequencies of captured species: " (frequencies captured-species)
-  "\nMost common caught animal: " (get-most-common captured-species))
+  "\n\n I am choosing to answer this question using the DispositionIDDesc variable.
+  This is pretty easily modified to use a different condition."
+  "\n Count of captured species: " (count captured-species)
+  "\n Distinct captured species: " (distinct captured-species)
+  "\n Frequencies of captured species: " (frequencies captured-species)
+  "\n Most common caught animal: " (get-most-common captured-species))
