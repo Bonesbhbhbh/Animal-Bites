@@ -62,26 +62,20 @@
   "\nPlease note the odd space in the line above, thats from NA values which are stored as an empty string.")
 
 ;; get two columns, one with rabies results and one with animal types
-;; (def rabies-results (map #(if (= % "POSITIVE") % false) (rest (column animal-data "ResultsIDDesc"))))
+;; make new variable that contains only the species in cases that were positive for rabies
 (def rabies-results (map #(if (= % "") "UNKNOWN" %) (rest (column animal-data "ResultsIDDesc"))))
-  (println "Testing rabies-results"
-    "\n Distinct values: " (distinct rabies-results)
-    "\n first is boolean?"(boolean? (first rabies-results))
-    "\n first is false?"(= false (first rabies-results))
-  )
 (def species (rest (column animal-data "SpeciesIDDesc")))
 (def pos-results-species (filter some? 
   (for [x (range (count rabies-results))]
     (if (= (nth rabies-results x) "POSITIVE") (nth species x)))))
 
-;; (def rabies-results (rest (column animal-data "ResultsIDDesc")))
-;; (def species (rest (column animal-data "SpeciesIDDesc")))
-;; (def q2-results [])
-;; (for [n (range (count rabies-results))]
-;;   (if (== "POSITIVE" (nth rabies-results n)) 
-;;     (conj q2-results (nth species n)))
-;; )
-;; (println (filter #(< 0 (count %)) q2-results))
+;; Type of animal most likely to be caught after a bite?
+;; This is similar to the last question where we will filter down the species to only ones that have a value in the -- column
+(def disposition (rest (column animal-data "DispositionIDDesc")))
+(def head_sent_date (rest (column animal-data "head_sent_date")))
+(def captured-species (filter some?
+  (for [x (range (count disposition))]
+      (if (contains? #{"RELEASED" "KILLED" "DIED"} (nth disposition x)) (nth species x)))))
 
 ;; Answering Questions
 (println 
@@ -99,8 +93,24 @@
   "\n After replacing all missing, unknown and negative values with false, our frequencies are: "
   (frequencies rabies-results)
   "\n Actual results: "
-  "\n Count: " (count pos-results-species)
-  "\n Frequencies: " (frequencies pos-results-species))
-  ;; could do more work here to return max of frequencies
+  "\n Count: " (count pos-results-species) ; {UNKNOWN 603, RELEASED 912, KILLED 16, "" 7468, DIED 4}
+  "\n Frequencies: " (frequencies pos-results-species)
+  "\n most common animal to result in a positive rabies result? " (get-most-common pos-results-species))
 
-(println "\nType of animal most likely to be caught after a bite?")
+(println "\nType of animal most likely to be caught after a bite?"
+  "we need to decide if we want to use DispositionIDDesc as a metric of if an animal was caught or head_sent_date"
+  "\nDispositionIDDesc"
+  "\n\tFrequencies: " (frequencies disposition)
+  "\n\tDoing some quick math this would give us 932 animals who were caught (912+16+4)"
+
+  "\nhead_sent_date"
+  "\n\tCount of distinct entries: " (count (distinct head_sent_date))
+  "\n\tCount of entries (not empty strings)" (count (filter #(not= "" %) head_sent_date))
+  "\n\tUsing this metric, we would have 395 animals who were caught.
+        Presumably every animal who had it's head sent in was dead, which does not line up with our findings above."
+
+  "\n\n I am choosing to answer this question using the DispositionIDDesc variable. This is pretty easily modified to use a different condition."
+  "\nCount of captured species: " (count captured-species)
+  "\nDistinct captured species: " (distinct captured-species)
+  "\nFrequencies of captured species: " (frequencies captured-species)
+  "\nMost common caught animal: " (get-most-common captured-species))
