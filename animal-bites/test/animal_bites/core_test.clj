@@ -72,3 +72,22 @@
     )
   )
 )
+
+(deftest rabies-results-test
+  (testing "Testing properties of rabies-results"
+    ;; should be three unique values
+    (is (= 3 (count (distinct rabies-results))))
+    ;; should be -- values
+    (is (= 9003 (count rabies-results)))
+    ;; There should be -- Unknown values
+    (is (= 8700 ((frequencies rabies-results) "UNKNOWN")))
+    ;; Should be -- Negative values
+    (is (= 299 ((frequencies rabies-results) "NEGATIVE")))
+    ;; Should be -- Positive values
+    (is (= 4 ((frequencies rabies-results) "POSITIVE")))
+    ;; overall type should be a vector
+    (is (seq? rabies-results))
+    ;; each entry should be a string
+    (is (every? string? rabies-results))
+  )
+)

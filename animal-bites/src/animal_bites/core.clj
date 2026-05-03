@@ -50,7 +50,7 @@
     (first (for [i (range (count (first data))) ; for i in the number of headings:
       :when (= header (nth (first data) i))] ; when the heading matches the heading passed to func
       (map #(nth % i) data)))) ; take nth item from each row of the data
-      
+
 ;; initial exploration
 (println 
   "Columns in animal-data: "
@@ -62,14 +62,34 @@
   "\nPlease note the odd space in the line above, thats from NA values which are stored as an empty string.")
 
 ;; get two columns, one with rabies results and one with animal types
-(def rabies-results (map #(if (= % "POSITIVE") % false) (rest (column animal-data "ResultsIDDesc"))))
+;; (def rabies-results (map #(if (= % "POSITIVE") % false) (rest (column animal-data "ResultsIDDesc"))))
+(def rabies-results (map #(if (= % "") "UNKNOWN" %) (rest (column animal-data "ResultsIDDesc"))))
+  (println "Testing rabies-results"
+    "\n Distinct values: " (distinct rabies-results)
+    "\n first is boolean?"(boolean? (first rabies-results))
+    "\n first is false?"(= false (first rabies-results))
+  )
 (def species (rest (column animal-data "SpeciesIDDesc")))
+(def pos-results-species (filter some? 
+  (for [x (range (count rabies-results))]
+    (if (= (nth rabies-results x) "POSITIVE") (nth species x)))))
+
+;; (def rabies-results (rest (column animal-data "ResultsIDDesc")))
+;; (def species (rest (column animal-data "SpeciesIDDesc")))
+;; (def q2-results [])
+;; (for [n (range (count rabies-results))]
+;;   (if (== "POSITIVE" (nth rabies-results n)) 
+;;     (conj q2-results (nth species n)))
+;; )
+;; (println (filter #(< 0 (count %)) q2-results))
 
 ;; Answering Questions
 (println 
   "\nLeast common animal to be bitten by?"
   ;; (take-nth 2 (get-least-common species))
-  (get-least-common species) ; [SKUNK 1]
+  (get-least-common species)) ; [SKUNK 1]
+
+(println 
   "\nWhat is the species distribution of bites that resulted in positive rabies test results.
   What is the most common animal to result in a positive rabies result?" 
   ;; please note that we are not looking for the animal most LIKELY to result in a positive result
@@ -79,7 +99,8 @@
   "\n After replacing all missing, unknown and negative values with false, our frequencies are: "
   (frequencies rabies-results)
   "\n Actual results: "
-  ;; (for [x (range (count rabies-results))]
-  ;;   (if (nth rabies-results x) (nth species x))) ; returns nil a whole bunch of times
+  "\n Count: " (count pos-results-species)
+  "\n Frequencies: " (frequencies pos-results-species))
+  ;; could do more work here to return max of frequencies
 
-  "\nType of animal most likely to be caught after a bite?")
+(println "\nType of animal most likely to be caught after a bite?")
