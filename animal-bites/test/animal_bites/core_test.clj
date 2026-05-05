@@ -91,3 +91,10 @@
     (is (every? string? rabies-results))
   )
 )
+
+(deftest date-converter-test
+  (testing "Testing date-converter"
+    (is (= 0 1))
+    ;; (is (= "" (date-converter "1985-05-05 00:00:00"))) ; check for correct result
+    ;; (is (date? (date-converter "1985-05-05 00:00:00"))) ; test output type
+  ))

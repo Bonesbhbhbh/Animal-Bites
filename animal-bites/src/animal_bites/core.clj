@@ -2,6 +2,7 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [clojure.data.csv :as csv]))
+(import java.time.LocalDate)
 ;; This code is written by Orville Anderson and Harley Hannahs.
 
 (def animal-data 
@@ -50,6 +51,17 @@
       :when (= header (nth (first data) i))] ; when the heading matches the heading passed to func
       (map #(nth % i) data)))) ; take nth item from each row of the data
 
+(defn date-converter
+  "Takes a date in a format which starts with `YYYY-MM-DD `.
+  Returns the date as a Java Date object"
+  [date]
+  (let 
+    [date-elements (map Integer/parseInt (subvec (str/split date #"[ -]") 0 3))] ; splits on dash and space
+    ;; Use subvec here instead of a limit on str/split so the third element is not "DD 00:00:00" and do not get number format exception.
+    (LocalDate/of (nth date-elements 0) ; Year
+                  (nth date-elements 1) ; Month
+                  (nth date-elements 2)))) ; Day
+
 ;; initial exploration
 (println 
   "\n Columns in animal-data: "
@@ -75,6 +87,13 @@
 (def captured-species (filter some?
   (for [x (range (count disposition))]
       (if (contains? #{"RELEASED" "KILLED" "DIED"} (nth disposition x)) (nth species x)))))
+
+;; Most Recent Bite
+(def bite-dates
+              (->> (column animal-data "bite_date")
+                (rest) ; remove column header
+                (map date-converter ) ; convert to dates
+              ))
 
 ;; Answering Questions
 (println 
@@ -115,3 +134,6 @@
   "\n Distinct captured species: " (distinct captured-species)
   "\n Frequencies of captured species: " (frequencies captured-species)
   "\n Most common caught animal: " (get-most-common captured-species))
+
+(println 
+  "\n What date was the most recent bite?")
