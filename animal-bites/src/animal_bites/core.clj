@@ -76,6 +76,10 @@
   (for [x (range (count disposition))]
       (if (contains? #{"RELEASED" "KILLED" "DIED"} (nth disposition x)) (nth species x)))))
 
+;; Bite Location Code
+(def location (rest (column animal-data "WhereBittenIDDesc")))
+(def location-frequencies (frequencies location))
+
 ;; Answering Questions
 (println 
   "\n Least common animal to be bitten by?"
@@ -83,7 +87,7 @@
   (get-least-common species)) ; [SKUNK 1]
 
 (println 
-  "\n What is the species distribution of bites that resulted in positive rabies test results.
+  "\n What is the species distribution of bites that resulted in positive rabies test results?
   What is the most common animal to result in a positive rabies result?" 
   ;; please note that we are not looking for the animal most LIKELY to result in a positive result
   "\n First let's check what positive results are marked as.
@@ -115,3 +119,13 @@
   "\n Distinct captured species: " (distinct captured-species)
   "\n Frequencies of captured species: " (frequencies captured-species)
   "\n Most common caught animal: " (get-most-common captured-species))
+
+(println 
+  "\n What location are people most likely to get bitten, besides head or body? What other options are there?"
+  location-frequencies
+  "\n This result is not particularly interesting. I'm not sure what I expected."
+  "\n Percent of bites with known locations that were on the head: " 
+  (-> (location-frequencies "HEAD") ; count of head bites
+    (/ (+ (location-frequencies "HEAD") (location-frequencies "BODY"))) ; count of bites with known location
+    (float) ; make sure result is not a fraction
+    (* 100))) ; convert to percent
