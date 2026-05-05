@@ -3,6 +3,8 @@
             [clojure.string :as str]
             [clojure.data.csv :as csv]))
 ;; This code is written by Orville Anderson and Harley Hannahs.
+;; To run this project, simply call lein repl and read the terminal output.
+;; Our data file is located within the first level of this repository.
 
 (def animal-data 
   (with-open [reader (io/reader "Health_AnimalBites.csv")] ; this requires the data file to be stored at the project-level
@@ -80,7 +82,10 @@
 (println 
   "\n Least common animal to be bitten by?"
   ;; (take-nth 2 (get-least-common species))
-  (get-least-common species)) ; [SKUNK 1]
+  (get-least-common species) ; [SKUNK 1]
+  "\n Reflection:"
+  "\n This is interesting to think about as skunks are usually known for their spray being their main defense mechanism."
+  "\n I suppose that doesn't mean that they aren't also able to utilize other defenses.")
 
 (println 
   "\n What is the species distribution of bites that resulted in positive rabies test results.
@@ -94,7 +99,12 @@
   "\n Actual results: "
   "\n\t Count: " (count pos-results-species) ; {UNKNOWN 603, RELEASED 912, KILLED 16, "" 7468, DIED 4}
   "\n\t Frequencies: " (frequencies pos-results-species)
-  "\n\t Most common animal to result in a positive rabies result? " (get-most-common pos-results-species))
+  "\n\t Most common animal to result in a positive rabies result? " (get-most-common pos-results-species)
+  "\n Reflection:"
+  "\n It's surprising that there were so few rabies tests that actually concluded in a significant result."
+  "\n Were there so many results that came back as unknown because not all animals were tested?"
+  "\n Or is getting an inconclusive result from a rabies test common?"
+  "\n Or is it a mixture of both of these conclusions?")
 
 (println 
   "\n Type of animal most likely to be caught after a bite?
@@ -114,4 +124,11 @@
   "\n Count of captured species: " (count captured-species)
   "\n Distinct captured species: " (distinct captured-species)
   "\n Frequencies of captured species: " (frequencies captured-species)
-  "\n Most common caught animal: " (get-most-common captured-species))
+  "\n Most common caught animal: " (get-most-common captured-species)
+  "\n Reflection:"
+  "\n I feel like this is the most expected answer out of everything we've seen."
+  "\n I wonder if this information is impacted by the area that the data was collected in."
+  "\n Does being in an urban area increase the number of dogs that bite or are captured in general?"
+  "\n You would need data from both urban and non-urban areas to figure this out."
+  "\n Also, you can't simply assume that you can use the victim_zip data entries to answer this question,"
+  "\n because people could be visiting from different zip codes and still get bit by local animals.")
