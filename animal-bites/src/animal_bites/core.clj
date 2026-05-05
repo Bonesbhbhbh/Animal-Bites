@@ -4,6 +4,7 @@
             [clojure.data.csv :as csv]))
 ;; This code is written by Orville Anderson and Harley Hannahs.
 ;; To run this project, simply call lein repl and read the terminal output.
+;; Our data file is located within the first level of this repository.
 
 (def animal-data 
   (with-open [reader (io/reader "Health_AnimalBites.csv")] ; this requires the data file to be stored at the project-level
