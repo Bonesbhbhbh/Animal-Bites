@@ -1,6 +1,7 @@
 (ns animal-bites.core-test
   (:require [clojure.test :refer :all]
             [animal-bites.core :refer :all]))
+(import java.time.LocalDate)
 
 (deftest loading-test
   (testing "Testing the loading of the datafile"
@@ -94,7 +95,17 @@
 
 (deftest date-converter-test
   (testing "Testing date-converter"
-    (is (= 0 1))
-    ;; (is (= "" (date-converter "1985-05-05 00:00:00"))) ; check for correct result
-    ;; (is (date? (date-converter "1985-05-05 00:00:00"))) ; test output type
+    ;; check for correct result with time
+    (is (= (LocalDate/of 1985 5 5) (date-converter "1985-05-05 00:00:00")))
+    ;; check for output type with time
+    (is (= java.time.LocalDate (type (date-converter "1985-05-05 00:00:00"))))
+    ;; check for correct result without time
+    (is (= (LocalDate/of 1985 12 12) (date-converter "1985-12-12")))
+    ;; check for output type without time
+    (is (= java.time.LocalDate (type (date-converter "1985-12-12"))))
+    ;; check for correct result with date that hasn't happened yet
+    (is (= (LocalDate/of 3000 10 10) (date-converter "3000-10-10")))
+    ;; check for output type with date that hasn't happened yet
+    (is (= java.time.LocalDate (type (date-converter "3000-05-05"))))
+    ;; all other inputs return errors (as they should)
   ))
