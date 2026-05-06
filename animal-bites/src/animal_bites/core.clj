@@ -112,6 +112,10 @@
                                           (>= 2017 (.getYear %))) ; on or before 2017
                                       bite-dates)))
 
+;; Bite Location Code
+(def location (rest (column animal-data "WhereBittenIDDesc")))
+(def location-frequencies (frequencies location))
+
 ;; Answering Questions
 (println 
   "\n Least common animal to be bitten by?"
@@ -120,7 +124,7 @@
   "\n This is interesting to think about as skunks are usually known for their spray being their main defense mechanism."
   "\n I suppose that doesn't mean that they aren't also able to utilize other defenses."
 
-  "\n\n What is the species distribution of bites that resulted in positive rabies test results.
+  "\n\n What is the species distribution of bites that resulted in positive rabies test results?
   What is the most common animal to result in a positive rabies result?" 
   ;; please note that we are NOT looking for the animal most LIKELY to result in a positive result
   "\n First let's check what positive results are marked as.
@@ -174,4 +178,13 @@
   "\n What is most recent date in reduced set? "
   (.toString (first (reverse reduced-sorted-bite-dates))) ; 2017-09-07
   "\n There is nothing especially interesting about these two dates
-  except for the fact that to get them we needed to filter out some odd dates.")
+  except for the fact that to get them we needed to filter out some odd dates."
+
+  "\n\n What location are people most likely to get bitten, besides head or body? What other options are there?"
+  location-frequencies
+  "\n This result is not particularly interesting. I'm not sure what I expected."
+  "\n Percent of bites with known locations that were on the head: " 
+  (-> (location-frequencies "HEAD") ; count of head bites
+    (/ (+ (location-frequencies "HEAD") (location-frequencies "BODY"))) ; count of bites with known location
+    (float) ; make sure result is not a fraction
+    (* 100))) ; convert to percent
