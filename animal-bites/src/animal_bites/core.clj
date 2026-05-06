@@ -3,6 +3,7 @@
             [clojure.string :as str]
             [clojure.data.csv :as csv]))
 (import java.time.LocalDate)
+(import java.time.format.DateTimeFormatter)
 ;; This code is written by Orville Anderson and Harley Hannahs.
 
 (def animal-data 
@@ -58,9 +59,11 @@
   (let 
     [date-elements (map Integer/parseInt (subvec (str/split date #"[ -]") 0 3))] ; splits on dash and space
     ;; Use subvec here instead of a limit on str/split so the third element is not "DD 00:00:00" and do not get number format exception.
-    (LocalDate/of (nth date-elements 0) ; Year
+    (if (some nil? date-elements) ; if any values are nil, quit
+      nil
+      (LocalDate/of (nth date-elements 0) ; Year
                   (nth date-elements 1) ; Month
-                  (nth date-elements 2)))) ; Day
+                  (nth date-elements 2))))) ; Day
 
 ;; initial exploration
 (println 
@@ -92,8 +95,8 @@
 (def bite-dates
               (->> (column animal-data "bite_date")
                 (rest) ; remove column header
-                (map date-converter ) ; convert to dates
-              ))
+                (filter #(not= "" %) ) ; remove empty strings
+                (map date-converter ))) ; convert to dates
 
 ;; Answering Questions
 (println 
@@ -136,4 +139,12 @@
   "\n Most common caught animal: " (get-most-common captured-species))
 
 (println 
-  "\n What date was the most recent bite?")
+  "\n What date was the most recent bite? "
+  (.toString (first (reverse (sort bite-dates))))
+  "\n What date was the earliest bite? "
+  (.toString (first (sort bite-dates)))
+  "\n Both of these dates are odd because the set is supposed to be from the years 1985-2017!")
+  (def reduced-sorted-bite-dates (sort (filter #(and (<= 1985 (.getYear %)) (>= 2017 (.getYear %))) bite-dates))) ; sorted in ascending order
+(println 
+  "\n What is earliest date in reduced set? " (.toString (first reduced-sorted-bite-dates))
+  "\n What is most recent date in reduced set? " (.toString (first (reverse reduced-sorted-bite-dates))))
