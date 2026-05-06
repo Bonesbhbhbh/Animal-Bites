@@ -97,6 +97,7 @@
                 (rest) ; remove column header
                 (filter #(not= "" %) ) ; remove empty strings
                 (map date-converter ))) ; convert to dates
+(def reduced-sorted-bite-dates (sort (filter #(and (<= 1985 (.getYear %)) (>= 2017 (.getYear %))) bite-dates))) ; sorted in ascending order
 
 ;; Answering Questions
 (println 
@@ -139,12 +140,13 @@
   "\n Most common caught animal: " (get-most-common captured-species))
 
 (println 
-  "\n What date was the most recent bite? "
-  (.toString (first (reverse (sort bite-dates))))
+  "\n What date was the most recent bite? " 
+  (.toString (first (reverse (sort bite-dates)))) ; 5013-07-15
   "\n What date was the earliest bite? "
-  (.toString (first (sort bite-dates)))
-  "\n Both of these dates are odd because the set is supposed to be from the years 1985-2017!")
-  (def reduced-sorted-bite-dates (sort (filter #(and (<= 1985 (.getYear %)) (>= 2017 (.getYear %))) bite-dates))) ; sorted in ascending order
-(println 
-  "\n What is earliest date in reduced set? " (.toString (first reduced-sorted-bite-dates))
-  "\n What is most recent date in reduced set? " (.toString (first (reverse reduced-sorted-bite-dates))))
+  (.toString (first (sort bite-dates))) ; 1952-05-28
+  "\n Both of these dates are odd because the dataset is supposed to be from the years 1985-2017!"
+  "\n What is earliest date in reduced set? "
+  (.toString (first reduced-sorted-bite-dates)) ; 1985-05-05
+  "\n What is most recent date in reduced set? "
+  (.toString (first (reverse reduced-sorted-bite-dates))) ; 2017-09-07
+  "\n There is nothing especially interesting about these two dates except for the fact that to get them we needed to filter out some odd dates.")
